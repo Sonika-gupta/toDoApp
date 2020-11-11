@@ -2,11 +2,14 @@ html {
     font-family: Ubuntu, sans-serif;
     font-size: 16px;
 }
+* {
+    font: inherit;
+}
 main {
     margin: auto;
     width: auto;
     min-width: 410px;
-    max-width: 600px;
+    max-width: 550px;
 }
 ul {
     padding: 0;
@@ -16,23 +19,68 @@ img {
     height: 12px;
     width: 12px;
 }
-.small {
-    height: 10px;
-    width: 8px;
+/* input {
+    font: inherit;
+} */
+textarea:focus, input:focus {
+    outline: none;
+}
+label {
+    display: block;
+    color: rgb(105, 105, 105);
+}
+textarea {
+    resize: none;
+    height: 145px;
 }
 .bordered {
     border: solid 1px rgb(224, 224, 224);
     border-radius: 4px;
     box-shadow: 0 0 0 1px rgb(242, 242, 242);
     margin: 3px auto;
-    padding: 5px 10px;  
+    padding: 5px 10px;
+}
+.deadline {
+    grid-area: deadline;
+}
+.deleteButton {
+    grid-area: delete;
+    width: 70px;
+    height: 30px;
+    justify-self: end;
+    background-color: rgb(199,22,43);
+    color: white;
+    margin: 0;
+}
+.expand {
+    justify-self: flex-end;
 }
 .icon {
     margin: auto 5px;
 }
+.notes {
+    grid-area: notes;
+}
+.priority {
+    grid-area: priority;
+}
+.panel {
+    border-top: solid 1px rgb(224, 224, 224);
+    width: 100%;
+    height: 180px;
+    padding: 10px 0 0 5px;
+    display: grid;    
+    grid-template-areas:
+        "notes deadline"
+        "notes priority"
+        "notes delete";
+}
+.small {
+    height: 10px;
+    width: 8px;
+}
 .title-bar {
     display: flex;
-    border-bottom: solid 1px rgb(224, 224, 224);
     align-items: center;
     height: 33px;
     width: 100%;
@@ -43,12 +91,10 @@ img {
     align-items: center;
 }
 .text {
+    width: 100%;
     border: none;
     padding-left: 5px;
-    font-size: inherit;
-}
-#input-text:focus {
-    outline: none;
+    /* font-size: inherit; */
 }
 #new-task {
     display: flex;

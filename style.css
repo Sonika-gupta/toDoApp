@@ -2,17 +2,24 @@ html {
     font-family: "Avenir Next", Helevetica, sans-serif;
 }
 body {
-    min-width: 300px;
     margin: auto 10px;
+}
+main {
+    min-width: 300px;
+    max-width: 600px;
+    margin: 10px auto;
 }
 ul {
     padding: 0;
-    margin: 10px auto;
+    margin: 10px auto;    
 }
 
 img {
     height: 12px;
     width: 12px;
+}
+label {
+    display: block;
 }
 .icon {
     margin: auto 5px;
@@ -21,18 +28,24 @@ img {
     height: 10px;
     width: 10px;
 }
-.task {
+.task-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    width: auto;
-    height: 33px;
-    margin: 3px auto;
-    padding: 5px 10px;
-    max-width: 700px;
-    min-width: 300px;
+}
+.bordered {
     border: solid 1px rgb(224, 224, 224);
     border-radius: 4px;
     box-shadow: 0 0 0 1px rgb(242, 242, 242);
+    margin: 3px auto;
+    padding: 5px 10px;  
+}
+.task {
+    display: flex;
+    border-bottom: solid 1px rgb(224, 224, 224);
+    align-items: center;
+    height: 33px;
+    width: 100%;
 }
 .task:focus {
     outline: none;
@@ -48,4 +61,38 @@ img {
 }
 #new-task:focus-within {
     border: 1px solid rgb(100, 149, 237);
+}
+.notes {
+    grid-area: notes;
+    
+}
+.deadline {
+    grid-area: deadline;
+    
+}
+.priority {
+    grid-area: priority;
+    
+}
+.deleteButton {
+    grid-area: deleteButton;
+    width: 60px;
+    justify-self: end;
+}
+.panel {
+    display: grid;
+    grid-template-columns: auto 250px;
+    grid-template-rows: auto;
+    grid-gap: 5px;
+    grid-template-areas: 
+        "notes deadline"
+        "notes priority"
+        "notes deleteButton";
+    padding: 5px 10px;
+    width: 100%;
+    justify-content: space-evenly;
+    overflow: hidden;
+}
+.deleteButton {
+    background-color: red;
 }

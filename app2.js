@@ -10,7 +10,7 @@ class Task {
         this.title = title
         this.notes = notes || ''
         this.priority = priority || 'low'
-        this.deadline = deadline || 'Today'
+        this.deadline = deadline || ''
         this.isComplete = isComplete || false
     }
     updateTask(task) {
@@ -81,17 +81,24 @@ function appendData (data) {
     
     const notes = createItem('div',  {className: 'notes'}, 
         createItem('label',{for: 'notes'}, 'Notes'),
-        createItem('textarea', {className: 'bordered', name: 'notes', value: newTask.notes}))
+        createItem('textarea', {className: 'spaced bordered', name: 'notes', value: newTask.notes}))
     const deadline = createItem('div',  {className: 'deadline'},
         createItem('label', {for: 'deadline'}, 'Due Date'),
-        createItem('input', {type: 'date', className: 'bordered', name: 'deadline', value: newTask.deadline}))
+        createItem('div', {name: 'deadline', className: 'date-menu bordered'},
+            createItem('button', {}, 'Today'),
+            createItem('button', {}, 'Tomorrow'),
+            createItem('input', {type: 'date', 'style.width': '100px', value: newTask.deadline})))
     const priority = createItem('div',  {className: 'priority'},
         createItem('label', {for: 'priority'}, 'Priority'),
-        createItem('input', {type: 'select', className: 'bordered', name: 'priority', value: newTask.priority}))
+        createItem('select', {className: 'bordered', value: newTask.priority},
+            createItem('option', {value: 'none'}, 'None'),
+            createItem('option', {value: 'low'}, 'Low'),
+            createItem('option', {value: 'medium'}, 'Medium'),
+            createItem('option', {value: 'high'}, 'High')))
     // const deleteButton = createItem('div', {className: 'deleteButton'}, createItem('button', {for: 'notes'}, 'Delete'))
-    const deleteButton = createItem('button', {className: 'bordered deleteButton'}, 'Delete')
+    const deleteButton = createItem('button', {className: 'spaced bordered deleteButton'}, 'Delete')
 
-    const container = createItem('div', {className: 'bordered task-container'},
+    const container = createItem('div', {className: 'spaced bordered task-container'},
         createItem('div', {className: 'title-bar', onclick: expandPanel}, menu, checkbox, title, date, expand),
         createItem('div', {className: 'panel'}, notes, deadline, priority, deleteButton))
     container.style.borderLeft = `5px solid ${color[newTask.priority]}`;

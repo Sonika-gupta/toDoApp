@@ -78,23 +78,23 @@ function expandPanel() {
 }
 
 function appendTask (task, listName = 'personal') {
-    const menu = createItem('div', {className: 'icon'}, createItem('img', {className: 'small', src: 'menu.png'}));
+    const menu = createItem('div', {className: 'icon'}, createItem('img', {className: 'small', src: './images/menu.png'}));
     const checkbox = createItem('input', {type: 'checkbox', className: 'icon', id: task.id, value: false});
     const title = createItem('input', {className: 'text', value: task.title});
     const date = createItem('div', {className: 'date'}, task.deadline)
-    const expand = createItem('div', {className: 'icon expand'}, createItem('img', {src: 'down.png'}));
+    const expand = createItem('div', {className: 'icon expand'}, createItem('img', {src: './images/down.png'}));
     
-    const notes = createItem('div',  {className: 'notes'}, 
-        createItem('label',{for: 'notes'}, 'Notes'),
+    const notes = createItem('fieldset',  {className: 'notes'}, 
+        createItem('legend',{}, 'Notes'),
         createItem('textarea', {className: 'spaced bordered', name: 'notes', value: task.notes}))
     const deadline = createItem('div',  {className: 'deadline'},
-        createItem('label', {for: 'deadline'}, 'Due Date'),
-        createItem('div', {name: 'deadline', className: 'date-menu bordered'},
+        createItem('legend', {}, 'Due Date'),
+        createItem('fieldset', {name: 'deadline', className: 'date-menu bordered'},
             createItem('button', {}, 'Today'),
             createItem('button', {}, 'Tomorrow'),
             createItem('input', {type: 'date', 'style.width': '100px', value: task.deadline})))
-    const priority = createItem('div',  {className: 'priority'},
-        createItem('label', {for: 'priority'}, 'Priority'),
+    const priority = createItem('fieldset',  {className: 'priority'},
+        createItem('legend', {}, 'Priority'),
         createItem('select', {className: 'bordered', value: task.priority},
             createItem('option', {value: 'none'}, 'None'),
             createItem('option', {value: 'low'}, 'Low'),
@@ -104,7 +104,7 @@ function appendTask (task, listName = 'personal') {
 
     const container = createItem('div', {id: `task${task.id}`, className: 'spaced bordered task-container'},
         createItem('div', {className: 'title-bar', onclick: expandPanel}, menu, checkbox, title, date, expand),
-        createItem('div', {className: 'panel'}, notes, deadline, priority, deleteButton))
+        createItem('form', {className: 'panel'}, notes, deadline, priority, deleteButton))
     container.style.borderLeft = `5px solid ${color[task.priority]}`;
     document.getElementById('list').appendChild(document.createElement('li').appendChild(container))
 }
@@ -121,6 +121,7 @@ function newItem () {
 }
 
 function load(listName = 'personal') {
+    document.getElementsByTagName('title')[0].appendChild(document.createTextNode(listName));
     const temp = JSON.parse(localStorage.getItem(listName));
     console.log('loading', temp)
     if(temp) {

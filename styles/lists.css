@@ -1,0 +1,46 @@
+main {
+    display: flex;
+    justify-items: center;
+    margin: auto;
+    width: auto;
+    min-width: 600px;
+}
+nav {
+    background-color: whitesmoke;
+    display: flex;
+    height: 30px;
+}
+nav > ul {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    float: center;
+    margin: 0 auto;
+    padding: 0;
+    border-radius: 4px;
+}
+button {
+    width: 90px;
+}
+/* nav >  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+} */
+.list-icon {
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+    box-shadow: 0 0 0 2px rgb(78, 78, 78);
+}
+.caption {
+    text-transform: capitalize;
+    text-align: center;
+    text-emphasis: weight;
+    width: 100%;
+}
+.light {
+    color: gray;
+}

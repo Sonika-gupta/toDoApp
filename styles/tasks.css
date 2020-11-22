@@ -1,10 +1,3 @@
-html {
-    font-family: Ubuntu, sans-serif;
-    font-size: 16px;
-}
-* {
-    font: inherit;
-}
 main {
     margin: auto;
     width: auto;
@@ -44,13 +37,6 @@ footer {
 }
 select {
     width: 100%;
-}
-.bordered {
-    border: solid 1px rgb(224, 224, 224);
-    border-radius: 4px;
-    box-shadow: 0 0 0 1px rgb(242, 242, 242);
-    margin: 3px auto;
-
 }
 .spaced {
     padding: 5px 10px;

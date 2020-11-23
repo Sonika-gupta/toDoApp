@@ -1,7 +1,5 @@
 main {
-    display: flex;
-    justify-items: center;
-    margin: auto;
+    /* margin: auto; */
     width: auto;
     min-width: 600px;
 }
@@ -29,11 +27,18 @@ button {
     padding: 14px 16px;
     text-decoration: none;
 } */
+#index {
+    display: flex;
+    flex-direction: row;
+}
 .list-icon {
     width: 150px;
     height: 150px;
     margin: 10px;
     box-shadow: 0 0 0 2px rgb(78, 78, 78);
+}
+.list-icon-container {
+    margin: 10px;
 }
 .caption {
     text-transform: capitalize;

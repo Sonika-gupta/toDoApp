@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
 });
 app.get('/:location', (req, res) => {
     res.sendFile(__dirname + '/tasks.html')
-    loadList(req.params.location);
+    // loadList(req.params.location);
 })
 
 app.post('/', (req, res) => {

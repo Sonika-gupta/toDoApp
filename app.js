@@ -1,5 +1,5 @@
 const localStorage = window.localStorage;
-const color = {
+const priorityColor = {
     none: '',
     low: '#3465a4',
     medium: '#f57900',
@@ -10,7 +10,7 @@ class Task {
         this.id = id
         this.title = title
         this.notes = notes || ''
-        this.priority = priority || 'low'
+        this.priority = priority || ''
         this.deadline = deadline || ''
         this.isComplete = isComplete || false
     }
@@ -28,12 +28,13 @@ class ToDoApp {
             }
         };
         this.nextId = 1;
+        this.defaultColor = 'white';
     }
     getList(listName = 'personal') {
         return JSON.parse(localStorage.getItem(lists[listName]));
     }
     setList(listName = 'personal') {
-        localStorage.setItem(lists[listName], JSON.stringify(this.lists[listName]));
+        localStorage.setItem('lists', JSON.stringify(this.lists));
         console.log('list set.', localStorage)
     }
     addTask(task, listName = 'personal') {
@@ -56,10 +57,14 @@ class ToDoApp {
         }
         this.setList(listName);
         removeTask(`task${id}`, listName)
-    }/* 
-    renderList(listName = 'personal') {
-        load(listName)
-    } */
+    }
+    newList(name) {
+        this.lists[name] = {
+            color: this.defaultColor,
+            tasks: []
+        }
+        this.setList(name);
+    }
 }
 
 function createItem (type, props, ...children) {
@@ -112,7 +117,7 @@ function appendTask (viewtasks, task, listName = 'personal') {
     const container = createItem('div', {id: `task${task.id}`, className: 'spaced bordered task-container'},
         createItem('div', {className: 'title-bar', onclick: expandPanel}, menu, checkbox, title, date, expand),
         createItem('form', {className: 'panel'}, notes, deadline, priority, deleteButton))
-    container.style.borderLeft = `5px solid ${color[task.priority]}`;
+    container.style.borderLeft = `5px solid ${priorityColor[task.priority]}`;
    viewtasks.appendChild(document.createElement('li').appendChild(container))
 }
 function removeTask(id, listName = 'personal') {
@@ -129,7 +134,7 @@ function newInput () {
 
 function loadList(listName = 'personal') {
     document.getElementsByTagName('title')[0].appendChild(document.createTextNode(listName));
-    const temp = JSON.parse(localStorage.getItem(listName));
+    const temp = JSON.parse(localStorage.getItem(lists[listName]));
     console.log('loading', temp)
     const viewtasks =  document.getElementById('list')
     if(temp) {
@@ -140,9 +145,9 @@ function loadList(listName = 'personal') {
 };
 
 function appendListIcon(viewlists, list) {
-    const listIcon = createItem('div', {onclick: () => {
+    const listIcon = createItem('div', {className: 'list-icon-container', onclick: () => {
         location.href = `/${list[0]}`;
-    }} ,
+    }},
         createItem('div', {className: 'bordered list-icon', color: list[1].color}),
         createItem('div', {className: 'caption'}, list[0]),
         createItem('div', {className: 'caption light'}, list.location || 'On This Computer'),
@@ -150,6 +155,11 @@ function appendListIcon(viewlists, list) {
     viewlists.appendChild(listIcon)
 }
 
+function createNewList(viewlists) {
+    const name = window.prompt('List Name');
+    if(name) app.newList(name);
+    appendListIcon(viewlists, [name, app.lists[name]])
+}
 function getLists() {
     var temp = localStorage.getItem('lists')
     if(!temp) localStorage.setItem('lists', JSON.stringify(app.lists))
@@ -159,11 +169,12 @@ function getLists() {
 function load() {
     const lists = getLists();
     const viewlists = document.getElementById('index');
-    // console.log(Object.entries(lists))
     Object.entries(lists).forEach(list => {
         console.log(list)
         appendListIcon(viewlists, list)
     })
+    const newListButton = document.getElementById('newListButton')
+    newListButton.addEventListener('click', () => createNewList(viewlists))
 }
 
 document.body.onkeyup = function (e) {

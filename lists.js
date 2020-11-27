@@ -5,12 +5,20 @@ function createNewList() {
     if(name) app.newList(name);
     appendListIcon([name, app.lists[name]])
 }
+function minimap(list) {
+    return list.tasks.length ?
+        list.tasks.reduce((text, e) => text += `${e.title}\n`, '') :
+        createItem('div', {className: 'emptylist'}, 'No tasks')
+}
 function appendListIcon([listName, list]) {
     console.log('appending list icon for', listName)
     const listIcon = createItem('div', {className: 'list-icon-container', onclick: () => {
             location.href = `/${listName}`;
-        }},
-        createItem('div', {className: 'bordered list-icon', 'style.backgroundColor': list.color}),
+        }}, 
+        createItem('div', {
+                className: 'bordered list-icon',
+                style: `background-color: ${list.color}`
+            }, minimap(list)),
         createItem('div', {className: 'caption'}, listName),
         createItem('div', {className: 'caption light'}, list.location),
     );

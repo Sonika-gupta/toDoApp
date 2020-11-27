@@ -8,17 +8,32 @@
     <body>
         <header>
             <nav>
-                <button id="newListButton">New List</button>
-                <ul>
-                  <li><button> List </a></li>
-                  <li><button> Scheduled </a></li>
-                  <li><button> Today </a></li>
-                </ul>
+                <button id="newListButton" style="border-radius: 4px">New List</button>
+                <div>
+                  <button style="border-radius: 4px 0 0 4px" onclick="selectTab('index')">Lists</button>
+                  <button onclick="selectTab('scheduled')">Scheduled</button>
+                  <button style="border-radius: 0 4px 4px 0" onclick="selectTab('today')">Today</button>
+                </div>
             </nav>
         </header>
         <main>
-            <ul id="index"></ul>
+            <tab-panel>
+                <ul id="index"></ul>
+                <ul id="scheduled"></ul>
+                <ul id="today"></ul>
+            </tab-panel>
         </main>
     </body>
     <script type="module" src="lists.js"></script>
+    <script>
+        let tabs = Array.from(document.querySelector('tab-panel').children);
+        let buttons = Array.from(document.querySelector('nav>div').children);
+        function selectTab(selectedTab) {
+            for (let i = 0; i< tabs.length; i++) {
+                let selected = tabs[i].id == selectedTab;
+                tabs[i].style.display = selected ? "" : "none";
+                buttons[i].style.backgroundColor = buttons[i] == window.event.target ? "black" : "#585454"; 
+            }
+        }
+    </script>
 </html>

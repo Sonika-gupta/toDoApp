@@ -9,7 +9,6 @@ const priorityColor = {
 };
 
 function expandPanel() {
-    this.classList.toggle("active");
     var panel = this.nextElementSibling;
     if (panel.style.display === "grid")
         panel.style.display = "none";
@@ -31,7 +30,7 @@ function appendTask (task, listName) {
         createItem('fieldset', {name: 'deadline', className: 'date-menu bordered'},
             createItem('button', {}, 'Today'),
             createItem('button', {}, 'Tomorrow'),
-            createItem('input', {type: 'date', 'style.width': '100px', value: task.deadline})))
+            createItem('input', {type: 'date', style: 'width: 100px', value: task.deadline})))
     const priority = createItem('fieldset',  {className: 'priority'},
         createItem('legend', {}, 'Priority'),
         createItem('select', {className: 'bordered', value: task.priority},

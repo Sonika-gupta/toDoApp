@@ -79,7 +79,7 @@ select {
     border-top: solid 1px rgb(224, 224, 224);
     height: 180px;
     padding: 10px 0 0 5px;
-    display: grid;    
+    display: none;    
     grid-template-columns: auto 290px;
     grid-template-areas:
         "notes deadline"

@@ -1,10 +1,4 @@
 const localStorage = window.localStorage;
-const priorityColor = {
-    none: '',
-    low: '#3465a4',
-    medium: '#f57900',
-    high: '#cc0000'
-};
 class Task {
     constructor({id, title, notes, priority, deadline, isComplete}) {
         this.id = id
@@ -18,32 +12,40 @@ class Task {
         return Object.assign(this, task);
     }
 }
-
 class ToDoApp {
     constructor() {
-        this.lists = {
-            personal: {
-                color: 'white',
-                tasks: []
-            }
+        var temp = localStorage.getItem('lists')
+        if(temp) this.lists = JSON.parse(temp)
+        else {
+            this.lists = {
+                personal: {
+                    color: 'grey',
+                    location: 'On This Computer',
+                    tasks: [],
+                    nextId: 1
+                }
+            };
+            localStorage.setItem('lists', JSON.stringify(this.lists))
+        }
+        this.default = {
+            color: '#becedd',
+            location: 'On This Computer',
         };
-        this.nextId = 1;
-        this.defaultColor = 'white';
     }
-    getList(listName = 'personal') {
-        return JSON.parse(localStorage.getItem(lists[listName]));
+    getList(listName) {
+        return JSON.parse(localStorage.getItem('lists'))[listName];
     }
-    setList(listName = 'personal') {
+    setList() {
         localStorage.setItem('lists', JSON.stringify(this.lists));
         console.log('list set.', localStorage)
     }
-    addTask(task, listName = 'personal') {
-        task.id = this.nextId;
+    addTask(task, listName) {
+        console.log(this.lists)
+        task.id = this.lists[listName].nextId;
         task = new Task(task)
-        this.nextId++;
-        if(!this.lists[listName]) this.lists[listName] = {tasks: []};
+        this.lists[listName].nextId++;
         this.lists[listName].tasks.push(task);
-        this.setList(listName)
+        this.setList()
         return task;
     }
     deleteTask({id}, listName) {
@@ -55,134 +57,17 @@ class ToDoApp {
                 break;
             }
         }
-        this.setList(listName);
-        removeTask(`task${id}`, listName)
+        this.setList();
     }
     newList(name) {
         this.lists[name] = {
-            color: this.defaultColor,
-            tasks: []
+            color: this.default.color,
+            location: this.default.location,
+            tasks: [],
+            nextId: 1
         }
         this.setList(name);
     }
 }
-
-function createItem (type, props, ...children) {
-    let item = document.createElement(type);
-    if (props) Object.assign(item, props);
-    for (let child of children) {
-      if (typeof child != "string") item.appendChild(child);
-      else item.appendChild(document.createTextNode(child));
-    }
-    return item;
-}
-function expandPanel() {
-    this.classList.toggle("active");
-    var panel = this.nextElementSibling;
-    if (panel.style.display === "grid")
-        panel.style.display = "none";
-    else
-        panel.style.display = "grid";
-}
-
-function appendTask (viewtasks, task, listName = 'personal') {
-    const menu = createItem('div', {className: 'icon'}, createItem('img', {className: 'small', src: './images/menu.png'}));
-    const checkbox = createItem('input', {type: 'checkbox', className: 'icon', id: task.id, value: false});
-    const title = createItem('input', {className: 'text', value: task.title});
-    const date = createItem('div', {className: 'date'}, task.deadline)
-    const expand = createItem('div', {className: 'icon expand'}, createItem('img', {src: './images/down.png'}));
-    
-    const notes = createItem('fieldset',  {className: 'notes'}, 
-        createItem('legend',{}, 'Notes'),
-        createItem('textarea', {className: 'spaced bordered', name: 'notes', value: task.notes}))
-    const deadline = createItem('div',  {className: 'deadline'},
-        createItem('legend', {}, 'Due Date'),
-        createItem('fieldset', {name: 'deadline', className: 'date-menu bordered'},
-            createItem('button', {}, 'Today'),
-            createItem('button', {}, 'Tomorrow'),
-            createItem('input', {type: 'date', 'style.width': '100px', value: task.deadline})))
-    const priority = createItem('fieldset',  {className: 'priority'},
-        createItem('legend', {}, 'Priority'),
-        createItem('select', {className: 'bordered', value: task.priority},
-            createItem('option', {value: 'none'}, 'None'),
-            createItem('option', {value: 'low'}, 'Low'),
-            createItem('option', {value: 'medium'}, 'Medium'),
-            createItem('option', {value: 'high'}, 'High')))
-    const deleteButton = createItem('button', {
-        id: task.id,
-        className: 'spaced bordered deleteButton',
-        onclick: (e) => app.deleteTask(e.target, listName)
-    }, 'Delete')
-
-    const container = createItem('div', {id: `task${task.id}`, className: 'spaced bordered task-container'},
-        createItem('div', {className: 'title-bar', onclick: expandPanel}, menu, checkbox, title, date, expand),
-        createItem('form', {className: 'panel'}, notes, deadline, priority, deleteButton))
-    container.style.borderLeft = `5px solid ${priorityColor[task.priority]}`;
-   viewtasks.appendChild(document.createElement('li').appendChild(container))
-}
-function removeTask(id, listName = 'personal') {
-    const item = document.getElementById(id);
-    item.parentNode.removeChild(item);
-}
-function newInput () {
-  console.log('Inside new Item')
-  const input = document.getElementById('input-text')
-  console.log(input)
-    if (input.value) appendTask(app.addTask({title: input.value}))
-  input.value = ''
-}
-
-function loadList(listName = 'personal') {
-    document.getElementsByTagName('title')[0].appendChild(document.createTextNode(listName));
-    const temp = JSON.parse(localStorage.getItem(lists[listName]));
-    console.log('loading', temp)
-    const viewtasks =  document.getElementById('list')
-    if(temp) {
-        temp.forEach(element => {
-            appendTask(viewtasks, element, listName)
-        });
-    }
-};
-
-function appendListIcon(viewlists, list) {
-    const listIcon = createItem('div', {className: 'list-icon-container', onclick: () => {
-        location.href = `/${list[0]}`;
-    }},
-        createItem('div', {className: 'bordered list-icon', color: list[1].color}),
-        createItem('div', {className: 'caption'}, list[0]),
-        createItem('div', {className: 'caption light'}, list.location || 'On This Computer'),
-    );
-    viewlists.appendChild(listIcon)
-}
-
-function createNewList(viewlists) {
-    const name = window.prompt('List Name');
-    if(name) app.newList(name);
-    appendListIcon(viewlists, [name, app.lists[name]])
-}
-function getLists() {
-    var temp = localStorage.getItem('lists')
-    if(!temp) localStorage.setItem('lists', JSON.stringify(app.lists))
-    console.log(temp);
-    return JSON.parse(temp) || app.lists
-}
-function load() {
-    const lists = getLists();
-    const viewlists = document.getElementById('index');
-    Object.entries(lists).forEach(list => {
-        console.log(list)
-        appendListIcon(viewlists, list)
-    })
-    const newListButton = document.getElementById('newListButton')
-    newListButton.addEventListener('click', () => createNewList(viewlists))
-}
-
-document.body.onkeyup = function (e) {
-    if (e.keyCode === 13) {
-      console.log('enter clicked!')
-      newInput()
-    }
-}
-
 var app = new ToDoApp();
-load();
+export {app, localStorage};

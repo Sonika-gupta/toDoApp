@@ -1,37 +1,20 @@
-body {
-    margin: 0;
-}
 main {
-    /* margin: auto; */
     width: auto;
     min-width: 600px;
 }
-nav {
-    background-color: #323030;
-    display: flex;
-    height: 30px;
-    padding: 0 2px;
+nav img {
+    filter: invert(1);
 }
 button {
     width: 90px;
-    background-color: #585454;
-    color: white;
-    padding: 2px 3px;
-    border: solid 1px black;
-    margin: auto 0;
 }
 button:focus {
     outline: none;
 }
-nav > div {
-    justify-content: center;
-    display: flex;
-    margin: 0 auto;
-}
-#index {
-    display: flex;
-    flex-direction: row;
-    flex-flow: wrap;
+.emptylist {
+    position: relative;
+    top: 45%;
+    left: 30%;
 }
 .list-icon {
     width: 150px;
@@ -42,21 +25,41 @@ nav > div {
     font-size: 0.01em;
     white-space: pre-line;
 }
-.emptylist {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
 .list-icon-container {
     margin: 25px;
 }
-.caption {
-    text-transform: capitalize;
-    text-align: center;
-    text-emphasis: weight;
-    width: 100%;
+.menu > button {
+    border-radius: 4px;
 }
-.light {
-    color: gray;
+.tick {
+    height: 20px;
+    position: relative;
+    width: 30px;
+    float: right;
+    right: 10px;
+    bottom: 40px;
+}
+#context {
+    border-top: solid 1px darkgrey;
+    padding: 5px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+#index {
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+}
+#edit {
+    background-color: green;
+}
+#edit button {
+    background-color: inherit;
+    margin: auto 3px;
+}
+#edit span {
+    text-align: center;
+    margin: auto;
 }

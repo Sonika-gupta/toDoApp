@@ -8,3 +8,8 @@ export function createItem (type, props, ...children) {
     }
     return item;
 }
+
+export function removeItem(id) {
+  const item = document.getElementById(id);
+  item.parentNode.removeChild(item);
+}

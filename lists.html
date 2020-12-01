@@ -7,13 +7,23 @@
     </head>
     <body>
         <header>
-            <nav>
+            <nav id="main">
                 <button id="newListButton" style="border-radius: 4px">New List</button>
                 <div>
-                  <button style="border-radius: 4px 0 0 4px" onclick="selectTab('index')">Lists</button>
+                  <button style="border-radius: 4px 0 0 4px; background-color: black;" onclick="selectTab('index')">Lists</button>
                   <button onclick="selectTab('scheduled')">Scheduled</button>
                   <button style="border-radius: 0 4px 4px 0" onclick="selectTab('today')">Today</button>
                 </div>
+                <button id="selectButton" class="right small" onclick=enterEdit()>
+                    <img src="/images/tick.png">
+                </button>
+            </nav>
+            <nav id="edit" class="menu hidden"> 
+                <span style="width: 100%;">Click a task list to select</span>
+                <button style="background-color: darkgreen", class="right small" onclick=escapeEdit()>
+                    <img src="/images/tick.png">
+                </button>
+                <button onclick=escapeEdit()>Cancel</button>
             </nav>
         </header>
         <main>
@@ -23,6 +33,10 @@
                 <ul id="today"></ul>
             </tab-panel>
         </main>
+        <footer id="context" class="menu hidden">
+            <button id="renameListButton" style='background-color: white;' disabled>Rename</button>
+            <button id="deleteListButton" class="right" disabled>Delete</button>
+        </footer>
     </body>
     <script type="module" src="lists.js"></script>
     <script>

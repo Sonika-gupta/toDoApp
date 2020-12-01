@@ -4,6 +4,12 @@ main {
     min-width: 410px;
     max-width: 550px;
 }
+nav {
+    height: 40px
+}
+nav > div {
+    flex-direction: column;
+}
 ul {
     padding: 0;
     margin: 10px auto;    
@@ -11,10 +17,7 @@ ul {
 fieldset {
     all: unset;
 }
-img {
-    height: 12px;
-    width: 12px;
-}
+
 textarea:focus, input:focus {
     outline: none;
 }
@@ -38,8 +41,15 @@ footer {
 select {
     width: 100%;
 }
-.spaced {
-    padding: 5px 10px;
+input[type = "color"] {
+    height: 90%;
+    padding: 0;
+    margin: auto 0;
+    border: none;
+    background-color: #585454
+}
+.active {
+    display: grid !important;
 }
 .date-menu {
     display: flex;
@@ -59,8 +69,6 @@ select {
     width: 70px;
     height: 30px;
     justify-self: end;
-    background-color: rgb(199,22,43);
-    color: white;
     margin: 0;
 }
 .expand {
@@ -91,6 +99,9 @@ select {
     height: 10px;
     width: 8px;
 }
+.spaced {
+    padding: 5px 10px;
+}
 .title-bar {
     display: flex;
     align-items: center;
@@ -101,13 +112,21 @@ select {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: white;
 }
 .text {
     width: 100%;
     border: none;
     padding-left: 5px;
 }
+#list-name {
+    color: white;
+    text-align: center;
+    text-emphasis: weight;
+    width: 100%;
+}
 #new-task {
+    background-color: white;
     display: flex;
     align-items: center;
     height: 33px;

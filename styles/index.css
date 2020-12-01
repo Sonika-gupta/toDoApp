@@ -2,12 +2,62 @@ html {
     font-family: Ubuntu, sans-serif;
     font-size: 16px;
 }
+body {
+    margin: 0;
+}
 * {
-    font-family: inherit;
+    font: inherit;
+}
+button.small {
+    width: 30px;
+    height: 80%;
+}
+img {
+    height: 12px;
+    width: 12px;
+}
+nav {
+    background-color: #323030;
+    display: flex;
+    height: 30px;
+    padding: 0 2px;
+    color: white;
+}
+nav button {
+    background-color: #585454;
+    border: solid 1px black;
+    color: white;
+    padding: 2px 3px;
+    margin: auto 0;
+}
+nav > div {
+    justify-content: center;
+    display: flex;
+    margin: 0 auto;
+}
+.caption {
+    text-transform: capitalize;
+    text-align: center;
+    text-emphasis: weight;
+    width: 100%;
+}
+.hidden {
+    display: none;
+}
+.light {
+    color: gray;
+    font-size: 0.9em;
+}
+.right {
+    float: right;
 }
 .bordered {
     border: solid 1px rgb(224, 224, 224);
     border-radius: 4px;
     box-shadow: 0 0 0 1px rgb(242, 242, 242);
     margin: 3px auto;
+}
+.deleteButton {
+    background-color: rgb(199,22,43);
+    color: white;
 }

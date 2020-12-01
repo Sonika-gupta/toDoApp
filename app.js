@@ -8,9 +8,9 @@ class Task {
         this.deadline = deadline || ''
         this.isComplete = isComplete || false
     }
-    updateTask(task) {
+/*     updateTask(task) {
         return Object.assign(this, task);
-    }
+    } */
 }
 class ToDoApp {
     constructor() {
@@ -18,8 +18,9 @@ class ToDoApp {
         if(temp) this.lists = JSON.parse(temp)
         else {
             this.lists = {
-                personal: {
-                    color: 'grey',
+                0: {
+                    name: 'personal',
+                    color: 'white',
                     location: 'On This Computer',
                     tasks: [],
                     nextId: 1
@@ -31,26 +32,57 @@ class ToDoApp {
             color: '#becedd',
             location: 'On This Computer',
         };
+        this.nextId = localStorage.getItem('nextId') || 1;
     }
-    getList(listName) {
-        return JSON.parse(localStorage.getItem('lists'))[listName];
+    getList(id) {
+        return JSON.parse(localStorage.getItem('lists'))[id];
     }
     setList() {
         localStorage.setItem('lists', JSON.stringify(this.lists));
         console.log('list set.', localStorage)
     }
-    addTask(task, listName) {
+    newList(name) {
+        let id = this.nextId;
+        this.lists[id] = {
+            name: name,
+            color: this.default.color,
+            location: this.default.location,
+            tasks: [],
+            nextId: 1
+        }
+        this.nextId++;
+        localStorage.setItem('nextId', this.nextId);
+        this.setList();
+        return id;
+    }
+    deleteLists(ids) {
+        console.log(ids);
+        ids.forEach(id => {
+            delete this.lists[id];
+            console.log(this.lists.hasOwnProperty(id));            
+        });
+        this.setList();
+    }
+    renameList(id, newName) {
+        console.log(id)
+        this.lists[id].name = newName;
+        this.setList();
+    }
+    updateList(id, newValue) {
+        this.lists[id] = Object.assign(this.lists[id], newValue);
+        this.setList()
+    }
+    addTask(task, listId) {
         console.log(this.lists)
-        task.id = this.lists[listName].nextId;
+        task.id = this.lists[listId].nextId;
         task = new Task(task)
-        this.lists[listName].nextId++;
-        this.lists[listName].tasks.push(task);
+        this.lists[listId].nextId++;
+        this.lists[listId].tasks.push(task);
         this.setList()
         return task;
     }
-    deleteTask({id}, listName) {
-        console.log(id, 'inside remove')
-        var list = this.lists[listName].tasks;
+    deleteTask({id}, listId) {
+        var list = this.lists[listId].tasks;
         for (var i = 0; i < list.length; i++) {
             if (list[i].id == id) {
                 list.splice(i, 1);
@@ -59,14 +91,19 @@ class ToDoApp {
         }
         this.setList();
     }
-    newList(name) {
-        this.lists[name] = {
-            color: this.default.color,
-            location: this.default.location,
-            tasks: [],
-            nextId: 1
+    updateTask(task, listId) {
+        // console.log(id, name, value, 'inside update task')
+        console.log(task.parent)
+        /* var list = this.lists[listName].tasks;
+        for (var i = 0; i < list.length; i++) {
+            console.log(list[i]);
+            if (list[i].id == id) {
+                list[i][name] = value;
+                console.log(list[i][name])
+                break;
+            }
         }
-        this.setList(name);
+        this.setList(); */
     }
 }
 var app = new ToDoApp();

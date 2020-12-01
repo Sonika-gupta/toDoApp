@@ -2,12 +2,22 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="/styles/tasks.css">
         <link rel="stylesheet" href="/styles/index.css">
+        <link rel="stylesheet" href="/styles/tasks.css">
         <title style="text-transform: capitalize;"></title>
     </head>
 
     <body>
+        <header>
+            <nav>
+                <button id="backButton" class="small" style="border-radius: 4px" onclick="location.href = '/'"> < </button>
+                <div>
+                    <span id="list-name" class="caption"></span>
+                    <span id="location" class="caption light"></span>
+                </div>
+                <input type="color" class="right"></input>
+            </nav>
+        </header>
         <main>
             <ul id="list"></ul>
             <div class="bordered" id="new-task">
@@ -19,7 +29,7 @@
         </main>
         <footer>
             <div>
-                <img src="/images/magnify.png">
+                <img src="/images/magnify.png">Done
             </div>
         </footer>
     </body>

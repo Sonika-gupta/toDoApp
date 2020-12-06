@@ -27,8 +27,6 @@ nav button {
     background-color: #585454;
     border: solid 1px black;
     color: white;
-    padding: 2px 3px;
-    margin: auto 0;
 }
 nav > div {
     justify-content: center;
@@ -42,7 +40,7 @@ nav > div {
     width: 100%;
 }
 .hidden {
-    display: none;
+    display: none !important;
 }
 .light {
     color: gray;

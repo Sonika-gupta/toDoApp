@@ -7,7 +7,15 @@ const priorityColor = {
     medium: '#f57900',
     high: '#cc0000'
 };
+const properties = {
+    isComplete: 'checked',
+    title: 'value',
+    notes: 'value',
+    deadline: 'value',
+    priority: 'value',
+}
 // const PRIORITY = ['none', 'low', 'medium', 'high']
+
 function expandPanel() {
     const panel = this.nextElementSibling;
     if(panel.classList.contains('active'))
@@ -31,29 +39,41 @@ function setDeadline (day, task, listId) {
     updateTask(day.form.deadline, task, listId);
 }
 function fillData(form, task) {
-    const updatedValues = {
-        isComplete: 'checked',
-        title: 'value',
-        notes: 'value',
-        deadline: 'value',
-        priority: 'value',
+    Object.entries(properties).forEach(([key, value]) => form[key][value] = task[key]);
+    if(task.isComplete) {
+        form.isComplete.checked = true;
+        form.classList.add('complete');
+        if(!completedVisible) form.classList.add('hidden')
+        form.title.style = 'text-decoration: line-through'
     }
-    Object.entries(updatedValues).forEach(([key, value]) => form[key][value] = task[key]);
+    else {
+        form.classList.remove('complete')
+        form.title.style.removeProperty('text-decoration');
+    }
     form.style = `border-left: 5px solid ${priorityColor[task.priority]}`;
     form.querySelector('.date').innerHTML = formatDate(task.deadline);
 }
 function updateTask (changedItem, task, listId) {
-    task[changedItem.name] = changedItem.value;
+    task[changedItem.name] = changedItem[properties[changedItem.name]];
     fillData(changedItem.form, task);
     app.updateTask(task, listId);
 }
-function removeTask ({id}, listId) {
+function removeTask (id, listId) {
     app.deleteTask(id, listId);
     removeItem(`task${id}`);
 }
 function createTask (task, listId) {
     const menu = createItem('div', {className: 'icon'}, createItem('img', {className: 'small', src: './images/menu.png'}));
-    const checkbox = createItem('input', {className: 'icon', type: 'checkbox', name: "isComplete"});
+    const checkbox = createItem('input', {
+        className: 'icon',
+        type: 'checkbox',
+        name: "isComplete",
+        onchange: (e) => {
+            completedCount += e.target.checked ? 1 : -1;
+            toggleFooterVisibility();
+        },
+        onclick: (e) => e.stopPropagation(),
+    });
     const title = createItem('input', {className: 'text', name: "title"});
     const date = createItem('div', {className: 'date', name: "date"});
     const expand = createItem('div', {className: 'icon expand'}, createItem('img', {src: './images/down.png'}));
@@ -83,7 +103,7 @@ function createTask (task, listId) {
         type: 'button',
         id: task.id,
         className: 'deleteButton bordered',
-        onclick: (e) => removeTask(e.target, listId)
+        onclick: (e) => removeTask(e.target.id, listId)
     }, 'Delete');
     const form = createItem('form', {
             id: `task${task.id}`,
@@ -92,7 +112,7 @@ function createTask (task, listId) {
             onsubmit: (e) => e.preventDefault(),
         },
         createItem('div', {className: 'title-bar spaced', onclick: expandPanel}, menu, checkbox, title, date, expand),
-        createItem('div', {className: 'hidden panel'}, notes, deadline, priority, deleteButton));
+        createItem('div', {className: 'panel'}, notes, deadline, priority, deleteButton));
 
     fillData(form, task);
     return form;
@@ -106,11 +126,32 @@ function newInput() {
     console.log(input.value)
     input.value = ''
 }
+function toggleFooterVisibility() {
+    console.log(completedVisible || !completedVisible)
+    completedCount ? footer.classList.remove('hidden') : footer.classList.add('hidden');
+    document.getElementById('completedCount').innerHTML = completedCount;
+}
+function clearCompleted(list, listId) {
+    console.log(list, 'clearing');
+    list.tasks.forEach(task => {
+        if(task.isComplete) {
+            removeTask(task.id, listId);
+        }
+    });
+    completedCount = 0;
+    completedVisible = false;
+    toggleFooterVisibility();
+}
+
+const footer = document.querySelector('footer');
+let completedCount = 0, completedVisible = false;
+
 function loadList(listId) {
     const list = JSON.parse(localStorage.getItem('lists'))[listId]
     document.getElementsByTagName('title')[0].appendChild(document.createTextNode(list.name))
     document.getElementById('list-name').appendChild(document.createTextNode(list.name))
     document.getElementById('location').appendChild(document.createTextNode(list.location))
+    document.getElementById('clearCompletedButton').addEventListener('click', () => clearCompleted(list, listId)) 
 
     const colorPicker = document.querySelector('nav>input[type=color]')
     colorPicker.addEventListener('change', (e) => {
@@ -121,8 +162,14 @@ function loadList(listId) {
 
     const ul = document.getElementById('list')
     list.tasks.forEach(task => {
+        if(task.isComplete) completedCount++;
         ul.appendChild(document.createElement('li').appendChild(createTask(task, listId)))
     });
+    document.getElementById('doneButton').addEventListener('click', () => {
+        document.querySelectorAll('form.complete').forEach(form => form.classList.toggle('hidden'));
+        completedVisible = true;
+    })
+    toggleFooterVisibility();
 }
 document.body.onkeyup = function (e) {
     if (e.key == 'Enter') {

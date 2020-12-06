@@ -2,6 +2,10 @@ main {
     width: auto;
     min-width: 600px;
 }
+nav button {
+    padding: 2px 3px;
+    margin: auto 0;
+}
 nav img {
     filter: invert(1);
 }

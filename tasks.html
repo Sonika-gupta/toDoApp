@@ -16,6 +16,9 @@
                     <span id="location" class="caption light"></span>
                 </div>
                 <input type="color" class="right"></input>
+                <button id="clearCompletedButton" class="small">
+                    <img src="/images/menu.png" style="filter: invert(1);">
+                </button>
             </nav>
         </header>
         <main>
@@ -28,9 +31,12 @@
             </div>
         </main>
         <footer>
-            <button class="light">
-                <img src="/images/magnify.png" style="filter: grayscale(100%);"> Done 
-            </button>
+            <div>
+                <button id="doneButton" class="light">
+                    <img src="/images/magnify.png" style="filter: opacity(0.5);"> Done 
+                    (<span id="completedCount"></span>)
+                </button>    
+            </div>
         </footer>
     </body>
     <script type="module" src="tasks.js"></script>

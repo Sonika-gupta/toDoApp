@@ -1,4 +1,4 @@
-main, footer > button {
+main, footer > div {
     margin: auto;
     width: auto;
     min-width: 410px;
@@ -6,6 +6,9 @@ main, footer > button {
 }
 nav {
     height: 40px;
+}
+nav > * {
+    margin: auto 5px;
 }
 nav > div {
     flex-direction: column;
@@ -40,11 +43,6 @@ footer {
     background-color: ghostwhite;
     width: 100%;
 }
-footer > button {
-   height: 30px;
-   margin-top: 10px;
-   text-align: start;
-}
 select {
     width: 100%;
     height: 30px;
@@ -55,9 +53,6 @@ input[type = "color"] {
     margin: auto 0;
     border: none;
     background-color: #585454
-}
-.active {
-    display: grid;
 }
 .date {
     width: 120px;
@@ -95,6 +90,7 @@ input[type = "color"] {
     grid-area: priority;
 }
 .panel {
+    display: none;
     border-top: solid 1px rgb(224, 224, 224);
     height: 180px;
     padding: 10px 0 5px 5px;
@@ -105,6 +101,9 @@ input[type = "color"] {
         "notes delete";
     grid-gap: 10px;
     /* transition: all 1s ease-in-out; */
+}
+.active {
+    display: grid;
 }
 .panel > .deleteButton {
     grid-area: delete;
@@ -136,6 +135,19 @@ input[type = "color"] {
     width: 100%;
     border: none;
     padding-left: 5px;
+}
+#doneButton {
+    height: 25px;
+    margin-top: 10px;
+    background-color: transparent;
+    text-align: start;
+    width: 100%;
+    border: none;
+}
+#doneButton:hover {
+    background-color: white;
+    outline: solid 1px grey;
+    border-radius: 4px;
 }
 #list-name {
     color: white;

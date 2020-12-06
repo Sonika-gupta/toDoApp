@@ -39,7 +39,7 @@ class ToDoApp {
     }
     setList() {
         localStorage.setItem('lists', JSON.stringify(this.lists));
-        console.log('list set.', localStorage)
+        console.log('Local Storage Updated.')
     }
     newList(name) {
         const id = this.nextId; // TO DO: Use an ID Generator.
@@ -56,7 +56,6 @@ class ToDoApp {
         return id;
     }
     deleteLists(ids) {
-        console.log(ids);
         ids.forEach(id => {
             delete this.lists[id];
             console.log(this.lists.hasOwnProperty(id));            
@@ -64,7 +63,6 @@ class ToDoApp {
         this.setList();
     }
     renameList(id, newName) {
-        console.log(id)
         this.lists[id].name = newName;
         this.setList();
     }
@@ -73,7 +71,6 @@ class ToDoApp {
         this.setList()
     }
     addTask(task, listId) {
-        console.log(this.lists)
         task.id = this.lists[listId].nextId;
         task = new Task(task)
         this.lists[listId].nextId++;
@@ -82,8 +79,9 @@ class ToDoApp {
         return task;
     }
     deleteTask(id, listId) {
-        var list = this.lists[listId].tasks;
-        for (var i = 0; i < list.length; i++) {
+        console.log(id, listId)
+        let list = this.lists[listId].tasks;
+        for (let i = 0; i < list.length; i++) {
             if (list[i].id == id) {
                 list.splice(i, 1);
                 break;
@@ -92,15 +90,14 @@ class ToDoApp {
         this.setList();
     }
     updateTask(task, listId) {
-        console.log(task, listId, 'inside update task')
-        // console.log(task.parent)
-        var list = this.lists[listId].tasks;
-        for (var i = 0; i < list.length; i++) {
+        let list = this.lists[listId].tasks;
+        for (let i = 0; i < list.length; i++) {
             if (list[i].id == task.id) {
                 list[i] = task;
                 break;
             }
         }
+        console.log('Updated Task "', task.title, '" in list', this.lists[listId].name)
         this.setList();
     }
 }

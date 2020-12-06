@@ -1,6 +1,5 @@
 import {createItem, removeItem} from './util.js';
-import {app, localStorage} from './app.js'
-// import {appendTask} from './tasks.js' // MAKES THE PAGE RELOAD CONSTANTLY.
+import {app} from './app.js'
 
 function createScheduledTab() {
     const scheduled = document.getElementById('scheduled')
@@ -15,14 +14,14 @@ function createNewList() {
     if(name) var listId = app.newList(name);
     appendListIcon([listId, app.lists[listId]])
 }
-export function renameList() {
+function renameList() {
     const target = document.querySelector('.tick:not(.hidden)').parentNode;
     const newName = window.prompt('New List Name: ');
     app.renameList(target.id.slice(4), newName);
     document.querySelector(`#${target.id} > .caption`).innerHTML = newName;
-    escapeEdit();
+    escapeEditMode();
 }
-export function deleteLists() {
+function deleteLists() {
     const lists = document.querySelectorAll('.tick:not(.hidden)')
     lists.forEach(list => removeItem(list.parentNode.id));
     app.deleteLists([...lists].map(node => node.parentElement.id.slice(4)));
@@ -33,7 +32,7 @@ function minimap(list) {
         createItem('div', {className: 'emptylist'}, 'No tasks')
 }
 function selectList(icon, listId) {
-    if(!editMode) enterEdit();
+    if(!editMode) enterEditMode();
     const container = icon.parentNode;
     container.selected = !container.selected;
     document.querySelector(`#list${listId}>.tick`).classList.toggle('hidden');
@@ -43,13 +42,13 @@ function selectList(icon, listId) {
     deleteListButton.disabled = personalList.selected || !selectedCount;
     deleteListButton.disabled ? deleteListButton.classList.remove('deleteButton') : deleteListButton.classList.add('deleteButton')
 }
-export function enterEdit() {
+function enterEditMode() {
     editMode = true;
     document.querySelector('#main').classList.add('hidden')
     document.querySelector('#edit.menu').classList.remove('hidden')
     document.querySelector('#context.menu').classList.remove('hidden')
 }
-export function escapeEdit() {
+function escapeEditMode() {
     editMode = false;
     document.querySelector('#main').classList.remove('hidden')
     document.querySelectorAll('.tick').forEach(node => node.classList.add('hidden'));
@@ -83,11 +82,11 @@ function appendListIcon([listId, list]) {
 document.body.onkeyup = function (e) {
     if (e.key == "Escape") {
       console.log('escape clicked!')
-      escapeEdit();
+      escapeEditMode();
     }
 }
 
-var renameListButton, deleteListButton, personalList, selectedCount = 0, editMode = false;
+let renameListButton, deleteListButton, personalList, selectedCount = 0, editMode = false;
 
 (function load() {
     document.getElementById('newListButton').addEventListener('click', createNewList)
@@ -101,7 +100,7 @@ var renameListButton, deleteListButton, personalList, selectedCount = 0, editMod
     })
     personalList = document.getElementById('list0');
 
-    Object.assign(window, {enterEdit, escapeEdit})
+    Object.assign(window, {enterEditMode, escapeEditMode})
     // createScheduledTab();
     // createTodayTab();
 }())

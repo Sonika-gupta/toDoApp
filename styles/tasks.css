@@ -1,11 +1,11 @@
-main {
+main, footer > button {
     margin: auto;
     width: auto;
     min-width: 410px;
     max-width: 550px;
 }
 nav {
-    height: 40px
+    height: 40px;
 }
 nav > div {
     flex-direction: column;
@@ -17,7 +17,9 @@ ul {
 fieldset {
     all: unset;
 }
-
+fieldset > * {
+    background-color: white;
+}
 textarea:focus, input:focus {
     outline: none;
 }
@@ -35,11 +37,17 @@ footer {
     position: absolute;
     bottom: 0;
     height: 50px;
-    background-color: lightgrey;
+    background-color: ghostwhite;
     width: 100%;
+}
+footer > button {
+   height: 30px;
+   margin-top: 10px;
+   text-align: start;
 }
 select {
     width: 100%;
+    height: 30px;
 }
 input[type = "color"] {
     height: 90%;
@@ -49,27 +57,30 @@ input[type = "color"] {
     background-color: #585454
 }
 .active {
-    display: grid !important;
+    display: grid;
+}
+.date {
+    width: 120px;
 }
 .date-menu {
     display: flex;
     width: 100%;
+    background-color: rgb(224, 224, 224);
+    height: 30px;
 }
 .date-menu > * {
+    background-color: white;
     display: flex;
-    border-radius: 0;
-    border: solid 1px rgb(224, 224, 224);
-    box-shadow: 0 0 0 1px rgb(242, 242, 242);
+    border: none;
+    padding: 0 10px;
+    line-height: 30px;
+}
+.date-menu > input[type="button"] {
+    text-transform: capitalize;
+    margin-right: 1px;
 }
 .deadline {
     grid-area: deadline;
-}
-.deleteButton {
-    grid-area: delete;
-    width: 70px;
-    height: 30px;
-    justify-self: end;
-    margin: 0;
 }
 .expand {
     justify-self: flex-end;
@@ -86,21 +97,28 @@ input[type = "color"] {
 .panel {
     border-top: solid 1px rgb(224, 224, 224);
     height: 180px;
-    padding: 10px 0 0 5px;
-    display: none;    
+    padding: 10px 0 5px 5px;
     grid-template-columns: auto 290px;
     grid-template-areas:
         "notes deadline"
         "notes priority"
         "notes delete";
     grid-gap: 10px;
+    /* transition: all 1s ease-in-out; */
+}
+.panel > .deleteButton {
+    grid-area: delete;
+    width: 70px;
+    height: 30px;
+    justify-self: end;
+    margin: inherit;
 }
 .small {
     height: 10px;
     width: 8px;
 }
 .spaced {
-    padding: 5px 10px;
+    padding: 3px 10px 3px 5px;
 }
 .title-bar {
     display: flex;

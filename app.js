@@ -4,7 +4,7 @@ class Task {
         this.id = id
         this.title = title
         this.notes = notes || ''
-        this.priority = priority || ''
+        this.priority = priority || 'none'
         this.deadline = deadline || ''
         this.isComplete = isComplete || false
     }
@@ -14,13 +14,13 @@ class Task {
 }
 class ToDoApp {
     constructor() {
-        var temp = localStorage.getItem('lists')
+        const temp = localStorage.getItem('lists')
         if(temp) this.lists = JSON.parse(temp)
         else {
             this.lists = {
                 0: {
                     name: 'personal',
-                    color: 'white',
+                    color: '#ffffff',
                     location: 'On This Computer',
                     tasks: [],
                     nextId: 1
@@ -42,7 +42,7 @@ class ToDoApp {
         console.log('list set.', localStorage)
     }
     newList(name) {
-        let id = this.nextId;
+        const id = this.nextId; // TO DO: Use an ID Generator.
         this.lists[id] = {
             name: name,
             color: this.default.color,
@@ -81,7 +81,7 @@ class ToDoApp {
         this.setList()
         return task;
     }
-    deleteTask({id}, listId) {
+    deleteTask(id, listId) {
         var list = this.lists[listId].tasks;
         for (var i = 0; i < list.length; i++) {
             if (list[i].id == id) {
@@ -92,19 +92,17 @@ class ToDoApp {
         this.setList();
     }
     updateTask(task, listId) {
-        // console.log(id, name, value, 'inside update task')
-        console.log(task.parent)
-        /* var list = this.lists[listName].tasks;
+        console.log(task, listId, 'inside update task')
+        // console.log(task.parent)
+        var list = this.lists[listId].tasks;
         for (var i = 0; i < list.length; i++) {
-            console.log(list[i]);
-            if (list[i].id == id) {
-                list[i][name] = value;
-                console.log(list[i][name])
+            if (list[i].id == task.id) {
+                list[i] = task;
                 break;
             }
         }
-        this.setList(); */
+        this.setList();
     }
 }
 var app = new ToDoApp();
-export {app, localStorage};
+export {app};

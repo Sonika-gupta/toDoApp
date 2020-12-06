@@ -24,6 +24,7 @@ button:focus {
     box-shadow: 0 0 0 2px rgb(78, 78, 78);
     font-size: 0.01em;
     white-space: pre-line;
+    box-shadow: 0 0 0 1px rgb(242, 242, 242);
 }
 .list-icon-container {
     margin: 25px;

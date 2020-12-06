@@ -14,16 +14,16 @@
                   <button onclick="selectTab('scheduled')">Scheduled</button>
                   <button style="border-radius: 0 4px 4px 0" onclick="selectTab('today')">Today</button>
                 </div>
-                <button id="selectButton" class="right small" onclick=enterEdit()>
+                <button id="selectButton" class="right small" onclick=enterEditMode()>
                     <img src="/images/tick.png">
                 </button>
             </nav>
             <nav id="edit" class="menu hidden"> 
                 <span style="width: 100%;">Click a task list to select</span>
-                <button style="background-color: darkgreen", class="right small" onclick=escapeEdit()>
+                <button style="background-color: darkgreen", class="right small" onclick=escapeEditMode()>
                     <img src="/images/tick.png">
                 </button>
-                <button onclick=escapeEdit()>Cancel</button>
+                <button onclick=escapeEditMode()>Cancel</button>
             </nav>
         </header>
         <main>

@@ -10,9 +10,13 @@
             <nav id="main">
                 <button id="newListButton" style="border-radius: 4px">New List</button>
                 <div>
-                  <button style="border-radius: 4px 0 0 4px; background-color: black;" onclick="selectTab('index')">Lists</button>
-                  <button onclick="selectTab('scheduled')">Scheduled</button>
-                  <button style="border-radius: 0 4px 4px 0" onclick="selectTab('today')">Today</button>
+                    <button style="border-radius: 4px 0 0 4px; background-color: black;" onclick="selectTab('index')">Lists</button>
+                    <button onclick="selectTab('scheduled')">Scheduled
+                        <span id="scheduledCount"></span>
+                    </button>
+                    <button style="border-radius: 0 4px 4px 0" onclick="selectTab('today')">Today
+                        <span id="todayCount"></span>
+                    </button>
                 </div>
                 <button id="selectButton" class="right small" onclick=enterEditMode()>
                     <img src="/images/tick.png">

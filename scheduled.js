@@ -1,45 +1,7 @@
-import { createItem, removeItem } from './util.js'
+import { createItem } from './util.js'
 import { app } from './app.js'
+import { expandPanel, properties, priorityColor, setDeadline, updateTask, removeTask, toggleFooterVisibility } from './tasks.js'
 
-const priorityColor = {
-  none: '#ffffff',
-  low: '#3465a4',
-  medium: '#f57900',
-  high: '#cc0000'
-}
-const properties = {
-  isComplete: 'checked',
-  title: 'value',
-  notes: 'value',
-  deadline: 'value',
-  priority: 'value'
-}
-// const PRIORITY = ['none', 'low', 'medium', 'high']
-
-function expandPanel () {
-  const panel = this.nextElementSibling
-  if (panel.classList.contains('active')) {
-    panel.classList.remove('active')
-    this.querySelector('.expand').style.removeProperty('transform')
-  } else {
-    document.querySelectorAll('.panel.active').forEach(node => node.classList.remove('active'))
-    panel.classList.add('active')
-    this.querySelector('.expand').style = 'transform: rotate(180deg)'
-  }
-}
-function formatDate (date) {
-  // DD/MM/YYYY
-  return date = date.split('-').reduce((deadline, term) => deadline = term + '/' + deadline)
-}
-function setDeadline (day, task, listId) {
-  let date = new Date()
-  if (day.value == 'tomorrow') date.setDate(date.getDate() + 1)
-  date = date.toLocaleString().slice(0, 10)
-  date = date.split('/').reduce((deadline, term) => deadline = term + '-' + deadline)
-  day.form.deadline.value = task.deadline = date
-  console.log(date)
-  updateTask(day.form.deadline, task, listId)
-}
 function fillData (form, task) {
   Object.entries(properties).forEach(([key, value]) => form[key][value] = task[key])
   if (task.isComplete) {
@@ -52,18 +14,8 @@ function fillData (form, task) {
     form.title.style.removeProperty('text-decoration')
   }
   form.style = `border-left: 5px solid ${priorityColor[task.priority]}`
-  form.querySelector('.date').innerHTML = formatDate(task.deadline)
 }
-function updateTask (changedItem, task, listId) {
-  task[changedItem.name] = changedItem[properties[changedItem.name]]
-  fillData(changedItem.form, task)
-  app.updateTask(task, listId)
-}
-function removeTask (id, listId) {
-  app.deleteTask(id, listId)
-  removeItem(`task${id}`)
-}
-function createTask (task, listId) {
+function createTask (task, listId, listName) {
   const menu = createItem('div', { className: 'icon' }, createItem('img', { className: 'small', src: './images/menu.png' }))
   const checkbox = createItem('input', {
     className: 'icon',
@@ -76,7 +28,7 @@ function createTask (task, listId) {
     onclick: (e) => e.stopPropagation()
   })
   const title = createItem('input', { className: 'text', name: 'title' })
-  const date = createItem('div', { className: 'date', name: 'date' })
+  const list = createItem('div', { className: 'list', name: 'list' }, listName)
   const expand = createItem('div', { className: 'icon expand', name: 'expand' }, createItem('img', { src: './images/down.png' }))
 
   const notes = createItem('fieldset', { className: 'notes' },
@@ -112,49 +64,42 @@ function createTask (task, listId) {
     onchange: (e) => updateTask(e.target, task, listId),
     onsubmit: (e) => e.preventDefault()
   },
-  createItem('div', { className: 'title-bar spaced', onclick: expandPanel }, menu, checkbox, title, date, expand),
+  createItem('div', { className: 'title-bar spaced', onclick: expandPanel }, menu, checkbox, title, list, expand),
   createItem('div', { className: 'panel' }, notes, deadline, priority, deleteButton))
 
   fillData(form, task)
   return form
 }
-function toggleFooterVisibility () {
-  completedCount ? footer.classList.remove('hidden') : footer.classList.add('hidden')
-  document.getElementById('completedCount').innerHTML = completedCount
-}
-function clearCompleted (list, listId) {
-  console.log(list, 'clearing')
-  list.tasks.forEach(task => {
-    if (task.isComplete) {
-      removeTask(task.id, listId)
-    }
+function clearCompleted (lists) {
+  Object.entries(lists).forEach(([listId, list]) => {
+    list.tasks.forEach(task => {
+      if (task.isComplete) {
+        removeTask(task.id, listId)
+      }
+    })
   })
   completedCount = 0
   completedVisible = false
   toggleFooterVisibility()
 }
 
-const footer = document.querySelector('footer')
 let completedCount = 0; let completedVisible = false
 
-function loadList (listId) {
-  const list = JSON.parse(localStorage.getItem('lists'))[listId]
-  document.getElementsByTagName('title')[0].appendChild(document.createTextNode(list.name))
-  document.getElementById('list-name').appendChild(document.createTextNode(list.name))
-  document.getElementById('location').appendChild(document.createTextNode(list.location))
-  document.getElementById('clearCompletedButton').addEventListener('click', () => clearCompleted(list, listId))
+function loadScheduled () {
+  document.body.appendChild(createItem('footer', {},
+    createItem('div', {},
+      createItem('button', { id: 'doneButton', class: 'light' },
+        createItem('img', { src: '/images/magnify.png', style: 'filter: opacity(0.5);' }, 'Done',
+          createItem('span', { id: 'completedCount' }))))))
 
-  const colorPicker = document.querySelector('nav>input[type=color]')
-  colorPicker.addEventListener('change', (e) => {
-    document.body.style.backgroundColor = e.target.value
-    app.updateList(listId, { color: e.target.value })
-  })
-  colorPicker.value = document.body.style.backgroundColor = list.color
+  const lists = JSON.parse(localStorage.getItem('lists'))
+  document.getElementById('clearCompletedButton').addEventListener('click', () => clearCompleted(lists))
 
-  const ul = document.getElementById('list')
-  list.tasks.forEach(task => {
-    if (task.isComplete) completedCount++
-    ul.appendChild(document.createElement('li').appendChild(createTask(task, listId)))
+  const ul = document.getElementById('scheduled')
+  Object.entries(lists).forEach(([listId, list]) => {
+    list.tasks.forEach(task => {
+      if (task.deadline) { ul.appendChild(document.createElement('li').appendChild(createTask(task, listId, list.name))) }
+    })
   })
   document.getElementById('doneButton').addEventListener('click', () => {
     document.querySelectorAll('form.complete').forEach(form => form.classList.toggle('hidden'))
@@ -173,8 +118,4 @@ document.body.onkeyup = function (e) {
   }
 }
 
-var currentList = decodeURI(window.location.href.split('/')[3])
-// To Avoid Infinite loading in case of 'Scheduled' and 'Today'
-if (currentList) app.lists[currentList] ? loadList(currentList) : location.href = '/'
-
-export { expandPanel, properties, priorityColor, setDeadline, updateTask, removeTask, toggleFooterVisibility }
+export { loadScheduled }

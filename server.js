@@ -1,27 +1,14 @@
 const express = require('express')
 const app = express()
-
-const { Client } = require('pg')
-const client = new Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'TODO',
-  port: 5432
-})
-client.connect()
-
-client.query('SELECT $1::text as message', ['Hello world!'], (err, res) => {
-  console.log(err ? err.stack : res.rows[0].message) // Hello World!
-  client.end()
-})
+const path = require('path')
 
 app.use(express.static(__dirname))
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/lists.html')
+  res.sendFile(path.join(__dirname, '/lists.html'))
 })
 app.get('/:location', (req, res) => {
-  res.sendFile(__dirname + '/tasks.html')
+  res.sendFile(path.join(__dirname, '/tasks.html'))
 })
 /*
 app.post('/', (req, res) => {

@@ -2,10 +2,10 @@ import { createItem, removeItem } from './util.js'
 import { app } from './app.js'
 
 const priorityColor = {
-  none: '#ffffff',
-  low: '#3465a4',
-  medium: '#f57900',
-  high: '#cc0000'
+  none: ' 1px #e0e0e0',
+  low: '5px #3465a4',
+  medium: '5px #f57900',
+  high: '5px #cc0000'
 }
 const properties = {
   isComplete: 'checked',
@@ -23,6 +23,7 @@ function expandPanel () {
     this.querySelector('.expand').style.removeProperty('transform')
   } else {
     document.querySelectorAll('.panel.active').forEach(node => node.classList.remove('active'))
+    document.querySelectorAll('.expand').forEach(node => node.style.removeProperty('transform'))
     panel.classList.add('active')
     this.querySelector('.expand').style = 'transform: rotate(180deg)'
   }
@@ -51,7 +52,7 @@ function fillData (form, task) {
     form.classList.remove('complete')
     form.title.style.removeProperty('text-decoration')
   }
-  form.style = `border-left: 5px solid ${priorityColor[task.priority]}`
+  form.style = `border-left: solid ${priorityColor[task.priority]}`
   form.querySelector('.date').innerHTML = formatDate(task.deadline)
 }
 function updateTask (changedItem, task, listId) {
@@ -76,7 +77,7 @@ function createTask (task, listId) {
     onclick: (e) => e.stopPropagation()
   })
   const title = createItem('input', { className: 'text', name: 'title' })
-  const date = createItem('div', { className: 'date', name: 'date' })
+  const date = createItem('span', { className: 'date', name: 'date' })
   const expand = createItem('div', { className: 'icon expand', name: 'expand' }, createItem('img', { src: './images/down.png' }))
 
   const notes = createItem('fieldset', { className: 'notes' },

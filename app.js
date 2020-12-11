@@ -1,3 +1,4 @@
+/* eslint eqeqeq: "off" */
 const localStorage = window.localStorage
 class Task {
   constructor ({ id, title, notes, priority, deadline, isComplete }) {
@@ -59,7 +60,7 @@ class ToDoApp {
   deleteLists (ids) {
     ids.forEach(id => {
       delete this.lists[id]
-      console.log(this.lists.hasOwnProperty(id))
+      console.log(this.lists[id])
     })
     this.setList()
   }

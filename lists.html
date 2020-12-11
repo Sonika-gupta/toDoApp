@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" href="/styles/lists.css">
         <link rel="stylesheet" href="/styles/index.css">
+        <link rel="stylesheet" href="/styles/scheduled.css">
         <title>To Do App</title>
     </head>
     <body>
@@ -10,16 +11,19 @@
             <nav id="main">
                 <button id="newListButton" style="border-radius: 4px">New List</button>
                 <div>
-                    <button style="border-radius: 4px 0 0 4px; background-color: black;" onclick="selectTab('index')">Lists</button>
-                    <button onclick="selectTab('scheduled')">Scheduled
+                    <button style="border-radius: 4px 0 0 4px; background-color: black;" onclick="selectTab('indexTab')">Lists</button>
+                    <button onclick="selectTab('scheduledTab')">Scheduled
                         <span id="scheduledCount"></span>
                     </button>
-                    <button style="border-radius: 0 4px 4px 0" onclick="selectTab('today')">Today
+                    <button style="border-radius: 0 4px 4px 0" onclick="selectTab('todayTab')">Today
                         <span id="todayCount"></span>
                     </button>
                 </div>
                 <button id="selectButton" class="right small" onclick=enterEditMode()>
                     <img src="/images/tick.png">
+                </button>
+                <button id="clearCompletedButton" class="right small">
+                    <img src="/images/menu.png" style="filter: invert(1);">
                 </button>
             </nav>
             <nav id="edit" class="menu hidden"> 
@@ -32,15 +36,31 @@
         </header>
         <main>
             <tab-panel>
-                <ul id="index"></ul>
-                <ul id="scheduled"></ul>
-                <ul id="today"></ul>
+                <tab id="indexTab">
+                    <ul id="index"></ul>
+                    <footer>
+                        <div id="context" class="menu hidden">
+                            <button id="renameListButton" style='background-color: white;' disabled>Rename</button>
+                            <button id="deleteListButton" class="right" disabled>Delete</button>
+                        </div>
+                    </footer>
+                </tab>
+                <tab id="scheduledTab" class="hidden">
+                    <ul id="scheduled"></ul>
+                    <footer>
+                        <div id="doneFooter">
+                            <button id="doneButton" class="light">
+                                <img src="/images/magnify.png" style="filter: opacity(0.5);"> Done 
+                                (<span id="completedCount"></span>)
+                            </button>    
+                        </div>
+                    </footer>            
+                </tab>
+                <tab id="todayTab" class="hidden">
+                    <ul id="today"></ul>
+                </tab>
             </tab-panel>
         </main>
-        <footer id="context" class="menu hidden">
-            <button id="renameListButton" style='background-color: white;' disabled>Rename</button>
-            <button id="deleteListButton" class="right" disabled>Delete</button>
-        </footer>
     </body>
     <script type="module" src="lists.js"></script>
     <script>
@@ -49,7 +69,7 @@
         function selectTab(selectedTab) {
             for (let i = 0; i< tabs.length; i++) {
                 let selected = tabs[i].id == selectedTab;
-                tabs[i].style.display = selected ? "" : "none";
+                selected ? tabs[i].classList.remove('hidden') : tabs[i].classList.add('hidden');
                 buttons[i].style.backgroundColor = buttons[i] == window.event.target ? "black" : "#585454"; 
             }
         }

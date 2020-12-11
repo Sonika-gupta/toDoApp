@@ -1,6 +1,6 @@
 import { createItem, removeItem } from './util.js'
 import { app } from './app.js'
-// import {loadScheduled} from './scheduled.js'
+import {loadScheduled} from './scheduled.js'
 // import {createTodayTab} from './today.js'
 
 function createNewList () {
@@ -22,8 +22,8 @@ function deleteLists () {
 }
 function minimap (list) {
   return list.tasks.length
-    ? list.tasks.reduce((text, e) => text += `${e.title}\n`, '')
-    : createItem('div', { className: 'emptylist' }, 'No tasks')
+    ? createItem('span', {}, list.tasks.reduce((text, e) => text += `${e.title}\n`, ''))
+    : createItem('span', { className: 'emptylist' }, 'No tasks')
 }
 function selectList (icon, listId) {
   if (!editMode) enterEditMode()
@@ -107,6 +107,6 @@ let renameListButton; let deleteListButton; let personalList; let selectedCount 
   if (scheduledCount) document.getElementById('scheduledCount').innerHTML = `(${scheduledCount})`
   if (todayCount) document.getElementById('todayCount').innerHTML = `(${todayCount})`
   Object.assign(window, { enterEditMode, escapeEditMode })
-  // loadScheduled();
+  loadScheduled();
   // createTodayTab();
 }())

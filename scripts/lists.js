@@ -1,7 +1,6 @@
 import { createItem, removeItem } from './util.js'
 import { app } from './app.js'
-import {loadScheduled} from './scheduled.js'
-// import {createTodayTab} from './today.js'
+import { loadOtherTabs } from './scheduled.js'
 
 function createNewList () {
   const name = window.prompt('List Name')
@@ -70,8 +69,6 @@ function appendListIcon ([listId, list]) {
   createItem('div', { className: 'caption' }, list.name),
   createItem('div', { className: 'caption light' }, list.location)
   )
-  // listIcon.addEventListener('contextmenu', (e) => {
-  // })
   document.getElementById('index').appendChild(listIcon)
 }
 document.body.onkeyup = function (e) {
@@ -81,7 +78,7 @@ document.body.onkeyup = function (e) {
   }
 }
 
-let renameListButton; let deleteListButton; let personalList; let selectedCount = 0; let editMode = false; let scheduledCount = 0; let todayCount = 0;
+let renameListButton; let deleteListButton; let personalList; let selectedCount = 0; let editMode = false;
 
 (function load () {
   document.getElementById('newListButton').addEventListener('click', createNewList)
@@ -90,23 +87,9 @@ let renameListButton; let deleteListButton; let personalList; let selectedCount 
   deleteListButton = document.getElementById('deleteListButton')
   deleteListButton.addEventListener('click', deleteLists)
 
-  Object.entries(app.lists).forEach(list => {
-    list[1].tasks.forEach(task => {
-      if (task.deadline) {
-        scheduledCount++
-        let today = new Date().toLocaleString().slice(0, 10)
-        today = today.split('/').reduce((deadline, term) => deadline = term + '-' + deadline)
-
-        if (today == task.deadline) todayCount++
-      }
-    })
-    appendListIcon(list)
-  })
+  Object.entries(app.lists).forEach(list => appendListIcon(list))
   personalList = document.getElementById('list0')
 
-  if (scheduledCount) document.getElementById('scheduledCount').innerHTML = `(${scheduledCount})`
-  if (todayCount) document.getElementById('todayCount').innerHTML = `(${todayCount})`
   Object.assign(window, { enterEditMode, escapeEditMode })
-  loadScheduled();
-  // createTodayTab();
+  loadOtherTabs();
 }())

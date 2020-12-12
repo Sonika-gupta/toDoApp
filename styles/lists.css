@@ -16,6 +16,14 @@ tab-panel button {
 button:focus {
     outline: none;
 }
+.doneButton {
+    margin: 10px 25%;
+}
+.doneFooter {
+    background-color: rgb(223, 223, 226);
+    height: 50px;
+    width: 100%;
+}
 .emptylist {
     position: relative;
     top: 45%;
@@ -64,6 +72,11 @@ button:focus {
     display: flex;
     flex-direction: row;
     flex-flow: wrap;
+}
+#otherTab > main, .doneButton {
+    padding: 0;
+    min-width: 410px;
+    max-width: 550px;
 }
 #edit {
     background-color: green;

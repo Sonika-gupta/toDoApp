@@ -3,7 +3,7 @@
     <head>
         <link rel="stylesheet" href="/styles/lists.css">
         <link rel="stylesheet" href="/styles/index.css">
-        <link rel="stylesheet" href="/styles/scheduled.css">
+        <link rel="stylesheet" href="/styles/tasks.css">
         <title>To Do App</title>
     </head>
     <body>
@@ -12,10 +12,10 @@
                 <button id="newListButton" style="border-radius: 4px">New List</button>
                 <div>
                     <button style="border-radius: 4px 0 0 4px; background-color: black;" onclick="selectTab('indexTab')">Lists</button>
-                    <button onclick="selectTab('scheduledTab')">Scheduled
+                    <button onclick="selectTab('otherTab', 'scheduled')">Scheduled
                         <span id="scheduledCount"></span>
                     </button>
-                    <button style="border-radius: 0 4px 4px 0" onclick="selectTab('todayTab')">Today
+                    <button style="border-radius: 0 4px 4px 0" onclick="selectTab('otherTab', 'today')">Today
                         <span id="todayCount"></span>
                     </button>
                 </div>
@@ -34,43 +34,60 @@
                 <button onclick=escapeEditMode()>Cancel</button>
             </nav>
         </header>
-        <main>
-            <tab-panel>
-                <tab id="indexTab">
+        <tab-panel>
+            <tab id="indexTab">
+                <main>
                     <ul id="index"></ul>
-                    <footer>
-                        <div id="context" class="menu hidden">
-                            <button id="renameListButton" style='background-color: white;' disabled>Rename</button>
-                            <button id="deleteListButton" class="right" disabled>Delete</button>
-                        </div>
-                    </footer>
-                </tab>
-                <tab id="scheduledTab" class="hidden">
-                    <ul id="scheduled"></ul>
-                    <footer>
-                        <div id="doneFooter">
-                            <button id="doneButton" class="light">
-                                <img src="/images/magnify.png" style="filter: opacity(0.5);"> Done 
-                                (<span id="completedCount"></span>)
-                            </button>    
-                        </div>
-                    </footer>            
-                </tab>
-                <tab id="todayTab" class="hidden">
+                </main>
+                <footer>
+                    <div id="context" class="menu hidden">
+                        <button id="renameListButton" style='background-color: white;' disabled>Rename</button>
+                        <button id="deleteListButton" class="right" disabled>Delete</button>
+                    </div>
+                </footer>
+            </tab>
+            <tab id="otherTab" class="hidden">
+                <main>
+                    <span class="scheduled">Today</span>
                     <ul id="today"></ul>
-                </tab>
-            </tab-panel>
-        </main>
+                    <span class="scheduled">Later</span>
+                    <ul id="scheduled" class="scheduled"></ul>
+                </main>
+                <footer id="scheduledFooter" class="scheduled">
+                    <div class="doneFooter">
+                        <button class="doneButton" class="light">
+                            <img src="/images/magnify.png" style="filter: opacity(0.5);"> Done 
+                            (<span id="completedCountScheduled"></span>)
+                        </button>
+                    </div>
+                </footer>
+                <footer id="todayFooter" class="today">
+                    <div class="doneFooter">
+                        <button class="doneButton" class="light">
+                            <img src="/images/magnify.png" style="filter: opacity(0.5);"> Done 
+                            (<span id="completedCountToday"></span>)
+                        </button>
+                    </div>
+                </footer>
+            </tab>
+        </tab-panel>
     </body>
-    <script type="module" src="lists.js"></script>
+    <script type="module" src="./scripts/lists.js"></script>
     <script>
         let tabs = Array.from(document.querySelector('tab-panel').children);
         let buttons = Array.from(document.querySelector('nav>div').children);
-        function selectTab(selectedTab) {
-            for (let i = 0; i< tabs.length; i++) {
-                let selected = tabs[i].id == selectedTab;
-                selected ? tabs[i].classList.remove('hidden') : tabs[i].classList.add('hidden');
+        function selectTab(selectedTab, filter) {
+            for (let i = 0; i< buttons.length; i++) {
                 buttons[i].style.backgroundColor = buttons[i] == window.event.target ? "black" : "#585454"; 
+            }
+            if (!filter) location.href = '/';
+            else {
+                tabs[0].classList.add('hidden');
+                tabs[1].classList.remove('hidden');
+                const otherFilter = filter == 'today' ? 'scheduled' : 'today';
+
+                document.querySelectorAll(`.${filter}`).forEach(node => node.classList.remove('hidden'));
+                document.querySelectorAll(`.${otherFilter}`).forEach(node => node.classList.add('hidden'));
             }
         }
     </script>

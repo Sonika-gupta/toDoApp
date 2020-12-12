@@ -1,0 +1,36 @@
+main, footer > div {
+    width: auto;
+    min-width: 410px;
+    max-width: 550px;
+}
+footer > div {
+    margin: auto;
+}
+footer {
+    background-color: ghostwhite;
+}
+nav {
+    height: 40px;
+}
+nav > * {
+    margin: auto 5px;
+}
+nav > div {
+    flex-direction: column;
+}
+input[type = "color"] {
+    height: 90%;
+    padding: 0;
+    margin: auto 0;
+    border: none;
+    background-color: #585454
+}
+#list-name {
+    color: white;
+    text-align: center;
+    text-emphasis: weight;
+    width: 100%;
+}
+#doneButton {
+    margin: 10px auto;
+}

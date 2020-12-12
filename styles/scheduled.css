@@ -32,13 +32,6 @@ select {
     background: transparent;
     text-transform: capitalize;
 }
-input[type = "color"] {
-    height: 90%;
-    padding: 0;
-    margin: auto 0;
-    border: none;
-    background-color: #585454
-}
 .list {
     width: 120px;
     text-align: end;
@@ -87,7 +80,7 @@ input[type = "color"] {
         "notes priority"
         "notes delete";
     grid-gap: 10px;
-    /* transition: all 1s ease-in-out; */
+    transition: display 1s ease-in-out;
 }
 .active {
     display: grid;
@@ -136,18 +129,6 @@ input[type = "color"] {
     background-color: white;
     outline: solid 1px grey;
     border-radius: 4px;
-}
-#doneFooter {
-    background-color: rgb(223, 223, 226);
-    height: 50px;
-    width: 100%;
-}
-#scheduled {
-    padding: 0;
-    margin: 10px auto;
-    width: auto;
-    min-width: 410px;
-    max-width: 550px;
 }
 #new-task {
     background-color: white;

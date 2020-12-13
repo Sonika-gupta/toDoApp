@@ -16,13 +16,15 @@ tab-panel button {
 button:focus {
     outline: none;
 }
-.doneButton {
-    margin: 10px 25%;
-}
 .doneFooter {
-    background-color: rgb(223, 223, 226);
+    background-color: ghostwhite;
     height: 50px;
     width: 100%;
+}
+.doneFooter > div {
+    margin: auto;
+    min-width: 410px;
+    max-width: 550px;
 }
 .emptylist {
     position: relative;

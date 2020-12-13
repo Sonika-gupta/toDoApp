@@ -5,13 +5,10 @@ function moveTask(form, task) {
   form.parentNode.removeChild(form)
   if (isDeadlineToday(task)) {
     today.appendChild(document.createElement('li').appendChild(form))
-    todayCount++;
   }
   else if(task.deadline) {
     scheduled.appendChild(document.createElement('li').appendChild(form))
-    todayCount--;
   }
-  updateCount();
 }
 function isDeadlineToday(task) {
   return formatDate(task.deadline) == 'today'
@@ -29,8 +26,10 @@ function removeTask (id, listId) {
 function updateTask (changedItem, task, listId) {
   task[changedItem.name] = changedItem[properties[changedItem.name]]
   fillData(changedItem.form, task)
-  moveTask(changedItem.form, task);
+  moveTask(changedItem.form, task)
   app.updateTask(task, listId)
+  toggleFooterVisibility()
+  updateCount()
 }
 function fillData (form, task) {
   Object.entries(properties).forEach(([key, value]) => (form[key][value] = task[key]))
@@ -44,18 +43,12 @@ function fillData (form, task) {
     form.title.style.removeProperty('text-decoration')
   }
   form.style = `border-left: solid ${priorityColor[task.priority]}`
-  updateCount()
 }
 function createTask (task, listId, listName) {
   const checkbox = createItem('input', {
     className: 'icon',
     type: 'checkbox',
     name: 'isComplete',
-    onchange: (e) => {
-      completedCountScheduled += e.target.checked ? 1 : -1
-      if (e.target.checked && isDeadlineToday(task)) completedCountToday++;
-      toggleFooterVisibility()
-    },
     onclick: (e) => e.stopPropagation()
   })
   const title = createItem('input', { className: 'text', name: 'title' })
@@ -110,13 +103,15 @@ function clearCompleted (lists) {
         if (task.isComplete) removeTask(task.id, listId)
       })
     })
-    completedCountScheduled = 0
     completedVisible = false
     toggleFooterVisibility()
+    updateCount()
     alert("All Completed Tasks deleted!")
   }
 }
 function toggleFooterVisibility () {
+  completedCountToday = document.querySelectorAll('#today form.complete').length
+  completedCountScheduled = completedCountToday + document.querySelectorAll('#scheduled form.complete').length
   completedCountScheduled ? scheduledFooter.classList.remove('hidden') : scheduledFooter.classList.add('hidden')
   completedCountToday ? todayFooter.classList.remove('hidden') : todayFooter.classList.add('hidden')
   document.getElementById('completedCountScheduled').innerHTML = completedCountScheduled
@@ -128,9 +123,10 @@ function listOptions(lists) {
   })
 }
 function updateCount() {
+  todayCount = document.querySelectorAll('#today form').length
+  scheduledCount = todayCount + document.querySelectorAll('#scheduled form').length;
   if (scheduledCount) document.getElementById('scheduledCount').innerHTML = `(${scheduledCount})`
   if (todayCount) document.getElementById('todayCount').innerHTML = `(${todayCount})`
-  
 }
 const scheduled = document.getElementById('scheduled')
 const today = document.getElementById('today')
@@ -149,12 +145,9 @@ function loadOtherTabs () {
         if (isDeadlineToday(task)) completedCountToday++;
       }
       if (isDeadlineToday(task)) {
-        todayCount++;
-        scheduledCount++;
         today.appendChild(document.createElement('li').appendChild(createTask(task, listId, list.name)))
       }
       else if(task.deadline) {
-        scheduledCount++;
         scheduled.appendChild(document.createElement('li').appendChild(createTask(task, listId, list.name)))
       }
     })
@@ -178,13 +171,10 @@ function loadOtherTabs () {
     if (e.key == 'Enter') {
       const input = document.getElementById('input-text')
       const listId = document.getElementById('listId').value
-      console.log(listId)
       if (input.value) {
         const task = createTask(app.addTask({ title: input.value, deadline: getDate('today') }, listId), listId, lists[listId].name)
         scheduled.appendChild(document.createElement('li').appendChild(task))
         today.appendChild(document.createElement('li').appendChild(task))
-        scheduledCount++;
-        todayCount++;
         updateCount();
       }
       input.value = ''

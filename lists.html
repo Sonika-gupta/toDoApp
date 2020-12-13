@@ -53,26 +53,29 @@
                     <span class="scheduled">Later</span>
                     <ul id="scheduled" class="scheduled"></ul>
                 </main>
-                <footer id="scheduledFooter" class="scheduled">
-                    <div class="doneFooter">
-                        <button class="doneButton" class="light">
-                            <img src="/images/magnify.png" style="filter: opacity(0.5);"> Done 
-                            (<span id="completedCountScheduled"></span>)
-                        </button>
+                <footer class="scheduled">
+                    <div id="scheduledFooter" class="doneFooter">
+                        <div>
+                            <button class="doneButton light">
+                                <img src="/images/magnify.png" style="filter: opacity(0.5);"> Done 
+                                (<span id="completedCountScheduled"></span>)
+                            </button>
+                        </div>
                     </div>
                 </footer>
-                <footer id="todayFooter" class="today">
-                    <div class="doneFooter">
-                        <button class="doneButton" class="light">
-                            <img src="/images/magnify.png" style="filter: opacity(0.5);"> Done 
-                            (<span id="completedCountToday"></span>)
-                        </button>
+                <footer class="today">
+                    <div id="todayFooter" class="doneFooter">
+                        <div>
+                            <button class="doneButton light">
+                                <img src="/images/magnify.png" style="filter: opacity(0.5);"> Done 
+                                (<span id="completedCountToday"></span>)
+                            </button>
+                        </div>
                     </div>
                 </footer>
             </tab>
         </tab-panel>
     </body>
-    <script type="module" src="./scripts/lists.js"></script>
     <script>
         let tabs = Array.from(document.querySelector('tab-panel').children);
         let buttons = Array.from(document.querySelector('nav>div').children);
@@ -91,4 +94,5 @@
             }
         }
     </script>
+    <script type="module" src="./scripts/lists.js"></script>
 </html>

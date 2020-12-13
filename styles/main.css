@@ -1,5 +1,4 @@
 main, footer > div {
-    width: auto;
     min-width: 410px;
     max-width: 550px;
 }
@@ -30,7 +29,4 @@ input[type = "color"] {
     text-align: center;
     text-emphasis: weight;
     width: 100%;
-}
-#doneButton {
-    margin: 10px auto;
 }

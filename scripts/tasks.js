@@ -71,7 +71,10 @@ function createTask (task, listId) {
     type: 'button',
     id: task.id,
     className: 'deleteButton bordered',
-    onclick: (e) => removeTask(e.target.id, listId)
+    onclick: (e) => {
+      removeTask(task.id, listId)
+      alert(`Task "${task.title}" Deleted`)
+    }
   }, 'Delete')
   const form = createItem('form', {
     id: `task${task.id}`,
@@ -90,15 +93,17 @@ function toggleFooterVisibility () {
   document.getElementById('completedCount').innerHTML = completedCount
 }
 function clearCompleted (list, listId) {
-  console.log(list, 'clearing')
-  list.tasks.forEach(task => {
-    if (task.isComplete) {
-      removeTask(task.id, listId)
-    }
-  })
-  completedCount = 0
-  completedVisible = false
-  toggleFooterVisibility()
+  if(confirm(`Clear Completed Tasks in List "${list.name}"?`)) {
+    list.tasks.forEach(task => {
+      if (task.isComplete) {
+        removeTask(task.id, listId)
+      }
+    })
+    completedCount = 0
+    completedVisible = false
+    toggleFooterVisibility()
+    alert("Completed Tasks in this list deleted!")
+  }
 }
 
 const footer = document.querySelector('footer')
@@ -123,7 +128,7 @@ function loadList (listId) {
     if (task.isComplete) completedCount++
     ul.appendChild(document.createElement('li').appendChild(createTask(task, listId)))
   })
-  document.getElementById('doneButton').addEventListener('click', () => {
+  document.querySelector('.doneButton').addEventListener('click', () => {
     document.querySelectorAll('form.complete').forEach(form => form.classList.toggle('hidden'))
     completedVisible = true
   })
@@ -141,5 +146,4 @@ document.body.onkeyup = function (e) {
 }
 
 var currentList = decodeURI(window.location.href.split('/')[3])
-// To Avoid Infinite loading in case of 'Scheduled' and 'Today'
-if (currentList) app.lists[currentList] ? loadList(currentList) : location.href = '/'
+app.lists[currentList] ? loadList(currentList) : location.href = '/'

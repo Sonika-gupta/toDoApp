@@ -58,11 +58,13 @@ class ToDoApp {
   }
 
   deleteLists (ids) {
-    ids.forEach(id => {
-      delete this.lists[id]
-      console.log(this.lists[id])
-    })
-    this.setList()
+    if (confirm('Delete Selected Lists?')) {
+      ids.forEach(id => {
+        delete this.lists[id]
+        console.log(this.lists[id])
+      })
+      this.setList()
+    }
   }
 
   renameList (id, newName) {

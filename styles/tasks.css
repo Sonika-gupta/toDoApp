@@ -119,16 +119,18 @@ select {
     border: none;
     padding-left: 5px;
 }
-#doneButton, .doneButton {
+.doneButton {
+    margin: 10px auto;
     height: 25px;
     background-color: transparent;
     text-align: start;
     border: none;
 }
-#doneButton:hover , .doneButton:hover {
+.doneButton:hover {
     background-color: white;
-    outline: solid 1px grey;
+    border: solid 1px grey;
     border-radius: 4px;
+    width: 100%;
 }
 #new-task {
     background-color: white;

@@ -20,17 +20,21 @@ function deleteLists () {
   app.deleteLists([...lists].map(node => node.parentElement.id.slice(4)))
 }
 function minimap (list) {
-  return list.tasks.length
-    ? createItem('span', {}, list.tasks.reduce((text, e) => text += `${e.title}\n`, ''))
-    : createItem('span', { className: 'emptylist' }, 'No tasks')
+  let minimap;
+  if (list.tasks.length)
+    minimap = list.tasks.reduce((text, e) => text += e.isComplete ? '' : `${e.title}\n`, '');
+
+  return minimap.length ? createItem('span', {}, minimap) : createItem('span', { className: 'emptylist' }, 'No tasks')
 }
-function selectList (icon, listId) {
+function selectList (listId) {
   if (!editMode) enterEditMode()
-  const container = icon.parentNode
+  const container = document.getElementById(`list${listId}`)
+  console.log(listId, container.selected, selectedCount)
   container.selected = !container.selected
   document.querySelector(`#list${listId}>.tick`).classList.toggle('hidden')
 
   selectedCount += container.selected ? 1 : -1
+  console.log(listId, container.selected, selectedCount)
   renameListButton.disabled = selectedCount != 1
   deleteListButton.disabled = personalList.selected || !selectedCount
   deleteListButton.disabled ? deleteListButton.classList.remove('deleteButton') : deleteListButton.classList.add('deleteButton')
@@ -54,16 +58,16 @@ function appendListIcon ([listId, list]) {
     className: 'list-icon-container',
     selected: false,
     onclick: (event) => {
-      editMode ? selectList(event.target, listId) : location.href = `/${listId}`
+      editMode ? selectList (listId) : location.href = `/${listId}`
     },
     oncontextmenu: (event) => {
       event.preventDefault()
-      selectList(event.target, listId)
+      selectList (listId)
     }
   },
   createItem('div', {
     className: 'bordered list-icon',
-    style: `background-color: ${list.color}`
+    style: `background-color: ${list.color}`,
   }, minimap(list)),
   createItem('img', { className: 'tick hidden', src: './images/tick.png' }),
   createItem('div', { className: 'caption' }, list.name),
@@ -71,13 +75,12 @@ function appendListIcon ([listId, list]) {
   )
   document.getElementById('index').appendChild(listIcon)
 }
-document.body.onkeyup = function (e) {
+document.body.onkeydown = function (e) {
   if (e.key == 'Escape') {
     console.log('escape clicked!')
     escapeEditMode()
   }
 }
-
 let renameListButton; let deleteListButton; let personalList; let selectedCount = 0; let editMode = false;
 
 (function load () {

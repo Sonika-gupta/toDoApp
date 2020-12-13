@@ -15,12 +15,15 @@ function renameList () {
   escapeEditMode()
 }
 function deleteLists () {
-  const lists = document.querySelectorAll('.tick:not(.hidden)')
-  lists.forEach(list => removeItem(list.parentNode.id))
-  app.deleteLists([...lists].map(node => node.parentElement.id.slice(4)))
+  if (confirm('Delete Selected Lists?')) {
+    const lists = document.querySelectorAll('.tick:not(.hidden)')
+    lists.forEach(list => removeItem(list.parentNode.id))
+    app.deleteLists([...lists].map(node => node.parentElement.id.slice(4)))
+    escapeEditMode()
+  }
 }
 function minimap (list) {
-  let minimap;
+  let minimap = '';
   if (list.tasks.length)
     minimap = list.tasks.reduce((text, e) => text += e.isComplete ? '' : `${e.title}\n`, '');
 
@@ -29,12 +32,9 @@ function minimap (list) {
 function selectList (listId) {
   if (!editMode) enterEditMode()
   const container = document.getElementById(`list${listId}`)
-  console.log(listId, container.selected, selectedCount)
   container.selected = !container.selected
   document.querySelector(`#list${listId}>.tick`).classList.toggle('hidden')
-
   selectedCount += container.selected ? 1 : -1
-  console.log(listId, container.selected, selectedCount)
   renameListButton.disabled = selectedCount != 1
   deleteListButton.disabled = personalList.selected || !selectedCount
   deleteListButton.disabled ? deleteListButton.classList.remove('deleteButton') : deleteListButton.classList.add('deleteButton')
@@ -51,6 +51,8 @@ function escapeEditMode () {
   document.querySelectorAll('.tick').forEach(node => node.classList.add('hidden'))
   document.querySelector('#edit.menu').classList.add('hidden')
   document.querySelector('#context.menu').classList.add('hidden')
+  document.querySelectorAll('.list-icon-container').forEach(container => container.selected = false)
+  selectedCount = 0
 }
 function appendListIcon ([listId, list]) {
   const listIcon = createItem('div', {
@@ -76,10 +78,7 @@ function appendListIcon ([listId, list]) {
   document.getElementById('index').appendChild(listIcon)
 }
 document.body.onkeydown = function (e) {
-  if (e.key == 'Escape') {
-    console.log('escape clicked!')
-    escapeEditMode()
-  }
+  if (e.key == 'Escape') escapeEditMode()
 }
 let renameListButton; let deleteListButton; let personalList; let selectedCount = 0; let editMode = false;
 

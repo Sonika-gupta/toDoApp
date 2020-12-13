@@ -4,7 +4,6 @@ import { app } from './app.js'
 function setDeadline (day, task, listId) {
   const date = getDate(day)
   day.form.deadline.value = task.deadline = date
-  console.log(date)
   updateTask(day.form.deadline, task, listId)
 }
 function fillData (form, task) {
@@ -145,5 +144,5 @@ document.body.onkeyup = function (e) {
   }
 }
 
-var currentList = decodeURI(window.location.href.split('/')[3])
+const currentList = decodeURI(window.location.href.split('/')[3])
 app.lists[currentList] ? loadList(currentList) : location.href = '/'

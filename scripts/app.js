@@ -58,13 +58,11 @@ class ToDoApp {
   }
 
   deleteLists (ids) {
-    if (confirm('Delete Selected Lists?')) {
-      ids.forEach(id => {
-        delete this.lists[id]
-        console.log(this.lists[id])
-      })
-      this.setList()
-    }
+    ids.forEach(id => {
+      delete this.lists[id]
+      console.log('deleted', this.lists[id])
+    })
+    this.setList()
   }
 
   renameList (id, newName) {
@@ -87,7 +85,6 @@ class ToDoApp {
   }
 
   deleteTask (id, listId) {
-    console.log(id, listId)
     const list = this.lists[listId].tasks
     for (let i = 0; i < list.length; i++) {
       if (list[i].id == id) {
@@ -96,6 +93,7 @@ class ToDoApp {
       }
     }
     this.setList()
+    console.log('deleted task', id, 'in list', listId)
   }
 
   updateTask (task, listId) {
